@@ -1,0 +1,94 @@
+{% extends 'clients/base.html' %}
+
+{% block title %}Ajouter un commentaire{% endblock %}
+
+{% block content %}
+    <h1>Ajouter un commentaire</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.text.label_tag }}
+            {{ form.text }}
+        </div>
+        <div class="form-group">
+            <p>Sentiment:</p>
+            {{ form.sentiment }}
+        </div>
+        <button type="submit">Enregistrer</button>
+    </form>
+
+    <form method="post" action="{% url 'retrain_model' %}">
+        {% csrf_token %}
+        <button type="submit" class="retrain-btn">Réentraîner le modèle</button>
+    </form>
+
+    {% if sentiment %}
+    <div class="sentiment-result">
+        <h3>Analyse du sentiment:</h3>
+        <p>Votre commentaire est: <strong>{{ sentiment }}</strong></p>
+    </div>
+    {% endif %}
+
+    <a href="{% url 'home' %}" class="back-link">Retour</a>
+
+    <style>
+        body {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            margin: 10px 0;
+            padding: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #666;
+            text-decoration: none;
+        }
+        .sentiment-result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .retrain-btn {
+            margin-top: 20px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .retrain-btn:hover {
+            background-color: #0056b3;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group ul {
+            list-style: none;
+            padding: 0;
+        }
+        .form-group li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+    </style>
+{% endblock %}

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+</head>
+<body>
+    <h1>tongasoa eto @E-Commerce</h1>
+    {% if request.session.client_id %}
+        <p>Tafiditra ianao</p>
+    {% else %}
+        <p>Azafady, <a href="{% url 'login' %}">midira</a>.</p>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Comantera - {{ produit.nom }}</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --success-color: #2ecc71;
+            --text-color: #2c3e50;
+            --light-gray: #f8f9fa;
+            --border-radius: 8px;
+        }
+    
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: #f5f7fa;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+    
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+    
+        .product-info {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    
+        .product-info h2 {
+            margin: 0 0 0.5rem 0;
+            color: var(--text-color);
+            font-size: 1.8rem;
+        }
+    
+        .product-info p {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #666;
+        }
+    
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+    
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    
+        .comment-form {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+    
+        .comment-form h3 {
+            margin-top: 0;
+            color: var(--text-color);
+        }
+    
+        .comment-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+        }
+    
+        .comment-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+    
+        .btn-submit {
+            background-color: var(--success-color);
+            color: white;
+        }
+    
+        .commentaire {
+            background-color: white;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+    
+        .commentaire:hover {
+            transform: translateY(-2px);
+        }
+    
+        .commentaire-auteur {
+            color: var(--text-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    
+        .commentaire-texte {
+            color: #4a5568;
+            line-height: 1.6;
+        }
+    
+        .messages {
+            margin-bottom: 1.5rem;
+        }
+    
+        .messages > div {
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            margin-bottom: 1rem;
+        }
+    
+        .error {
+            text-align: center;
+            padding: 1rem;
+            background-color: #ffebee;
+            color: #c62828;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <div class="product-info">
+            <div>            
+                <h2>{{ produit.nom }}</h2>
+                <p>Vidiny: {{ produit.prix }} Ar</p>
+            </div>
+            <div>
+                <a href="{% url 'home' %}" class="btn">Mijery vokatra</a>
+            </div>
+
+        </div>
+
+        {% if a_achete %}
+        <div class="comment-form">
+            <h3>Ampliana fanehoan-kevitra</h3>
+            <form method="POST">
+                {% csrf_token %}
+                <textarea name="commentaire" class="comment-input" rows="4" placeholder="Eto ny fanehoan-kevitrao..."></textarea>
+                <button type="submit" class="btn btn-submit">Aparitaka</button>
+            </form>
+        </div>
+        {% else %}
+        <h3 style="color:red">Mila mividy ilay vokatra ianao izay voa afaka mametraka fanehoan-kevitra.</h3>
+        {% endif %}
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if commentaires %}
+            {% for item in commentaires %}
+            <div class="commentaire">
+                <div class="commentaire-auteur">
+                    {{ item.commentaire.idclient.nom }} :
+                    <span title="Sentiment: {{ item.sentiment.sentiment }} (Confiance: {{ item.sentiment.confidence|floatformat:2 }})">
+                        {{ item.sentiment.emoji }}
+                    </span>
+                </div>
+                <div class="commentaire-texte">{{ item.commentaire.texte }}</div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>Mbola tsi misy fanehoan-kevitra.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
